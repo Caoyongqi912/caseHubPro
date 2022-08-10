@@ -1,10 +1,10 @@
 // @ts-ignore
 /* eslint-disable */
-import {request} from 'umi';
+import request from '@/utils/request';
 
 /** 获取当前的用户 GET /user/info */
 export async function currentUser(options?: { [key: string]: any }) {
-  return request<{ data: API.CurrentUser }>('/v1/api/user/info', {
+  return request<{ data: API.CurrentUser }>('/api/user/current', {
     method: 'GET',
     ...(options || {}),
   });
@@ -20,7 +20,7 @@ export async function outLogin(options?: { [key: string]: any }) {
 
 /** 登录接口 POST /user/login */
 export async function login(body: API.ILoginParams, options?: { [key: string]: any }) {
-  return request<API.IResponse>('/v1/api/user/login', {
+  return request<API.IResponse>('/api/user/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

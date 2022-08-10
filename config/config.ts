@@ -1,10 +1,10 @@
 // https://umijs.org/config/
-import {defineConfig} from 'umi';
+import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import routes from './routes';
 
-const {REACT_APP_ENV} = process.env;
+const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
   hash: true,
@@ -25,7 +25,7 @@ export default defineConfig({
     default: 'zh-CN',
     antd: true,
     // default true, when it is true, will use `navigator.language` overwrite default
-    baseNavigator: true,
+    baseNavigator: false,
   },
   dynamicImport: {
     loading: '@ant-design/pro-layout/es/PageLoading',
@@ -54,8 +54,8 @@ export default defineConfig({
   },
   // Fast Refresh 热更新
   fastRefresh: {},
-  nodeModulesTransform: {type: 'none'},
+  nodeModulesTransform: { type: 'none' },
   mfsu: {},
   webpack5: {},
-  exportStatic: {}
+  exportStatic: {},
 });

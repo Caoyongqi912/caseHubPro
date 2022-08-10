@@ -1,21 +1,16 @@
 import Footer from '@/components/Footer';
-import {login} from '@/services/ant-design-pro/api';
-import {
-  LockOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import {
-  LoginForm,
-  ProFormText,
-} from '@ant-design/pro-components';
-import {Alert, message} from 'antd';
-import React, {useState} from 'react';
-import {FormattedMessage, history, SelectLang, useIntl, useModel} from 'umi';
+import { login } from '@/services/ant-design-pro/api';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LoginForm, ProFormText } from '@ant-design/pro-components';
+import { Alert, message } from 'antd';
+import React, { useState } from 'react';
+import { FormattedMessage, history, SelectLang, useIntl, useModel } from 'umi';
 import styles from './index.less';
+import { getToken, setToken } from '@/utils/token';
 
 const LoginMessage: React.FC<{
   content: string;
-}> = ({content}) => (
+}> = ({ content }) => (
   <Alert
     style={{
       marginBottom: 24,
@@ -28,7 +23,7 @@ const LoginMessage: React.FC<{
 
 const Login: React.FC = () => {
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
-  const {initialState, setInitialState} = useModel('@@initialState');
+  const { initialState, setInitialState } = useModel('@@initialState');
   const intl = useIntl();
 
   const fetchUserInfo = async () => {
@@ -44,18 +39,23 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.ILoginParams) => {
     try {
       // 登录
-      const res = await login({...values});
-      if (res.code === 0) {
+      const res = await login({ ...values });
+      if (res.code === 0 && res.data) {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
+        /** save token */
+        const token = res.data;
+        if (token && token != getToken()) {
+          setToken(token);
+        }
         await fetchUserInfo();
         /** 此方法会跳转到 redirect 参数所在的位置 */
         if (!history) return;
-        const {query} = history.location;
-        const {redirect} = query as { redirect: string };
+        const { query } = history.location;
+        const { redirect } = query as { redirect: string };
         history.push(redirect || '/');
         return;
       }
@@ -70,15 +70,15 @@ const Login: React.FC = () => {
       message.error(defaultLoginFailureMessage);
     }
   };
-  const {code, msg} = userLoginState;
+  const { code, msg } = userLoginState;
   return (
     <div className={styles.container}>
-      <div className={styles.lang} data-lang="">`
-        {SelectLang && <SelectLang/>}
+      <div className={styles.lang} data-lang="">
+        `{SelectLang && <SelectLang />}
       </div>
       <div className={styles.content}>
         <LoginForm
-          title="Hub Login"
+          title="CaseHub Login"
           initialValues={{
             autoLogin: true,
           }}
@@ -94,12 +94,13 @@ const Login: React.FC = () => {
               })}
             />
           )}
-          <br/><br/>
+          <br />
+          <br />
           <ProFormText
             name="username"
             fieldProps={{
               size: 'large',
-              prefix: <UserOutlined className={styles.prefixIcon}/>,
+              prefix: <UserOutlined className={styles.prefixIcon} />,
             }}
             initialValue="ADMIN"
             placeholder={intl.formatMessage({
@@ -123,7 +124,7 @@ const Login: React.FC = () => {
             initialValue="ADMIN"
             fieldProps={{
               size: 'large',
-              prefix: <LockOutlined className={styles.prefixIcon}/>,
+              prefix: <LockOutlined className={styles.prefixIcon} />,
             }}
             rules={[
               {
@@ -137,10 +138,9 @@ const Login: React.FC = () => {
               },
             ]}
           />
-
         </LoginForm>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

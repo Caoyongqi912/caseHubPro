@@ -7,10 +7,9 @@
  * https://pro.ant.design/docs/deploy
  */
 
-
 export default {
   dev: {
-    '/v1/api': {
+    '/api': {
       target: 'http://127.0.0.1:5000',
       changeOrigin: true,
       // pathRewrite: { '^': '' },
@@ -20,14 +19,14 @@ export default {
     '/api/': {
       target: 'http://127.0.0.1:5000',
       changeOrigin: true,
-      pathRewrite: {'^': ''},
+      pathRewrite: { '^': '' },
     },
   },
   pre: {
     '/api/': {
       target: 'http://127.0.0.1:5000',
       changeOrigin: true,
-      pathRewrite: {'^': ''},
+      pathRewrite: { '^': '' },
     },
   },
 };

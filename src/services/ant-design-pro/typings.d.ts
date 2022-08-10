@@ -4,18 +4,21 @@
 declare namespace API {
   type IResponse = {
     code?: number;
-    data?: string;
+    data?: string | undefined;
     msg?: string;
   };
   type CurrentUser = {
     username?: string;
     avatar?: string;
     id?: number;
+    uid?: string;
     email?: string;
     isAdmin?: boolean;
     phone?: string;
-    tag?: string;
-    gender?: 'MALE' | 'FEMALE';
+    tag?: number;
+    gender?: number;
+    create_time?: string;
+    update_time?: string;
   };
 
   type LoginResult = {
@@ -51,13 +54,11 @@ declare namespace API {
     success?: boolean;
   };
 
-
   type ILoginParams = {
     username?: string;
     password?: string;
     autoLogin?: boolean;
   };
-
 
   type NoticeIconList = {
     data?: NoticeIconItem[];
